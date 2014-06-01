@@ -12,11 +12,11 @@ FROM devsoup/centos-jdk7
 WORKDIR /var
 RUN mkdir tmpbuild
 WORKDIR /var/tmpbuild
-RUN wget https://github.com/devsoup/SimpleDropWizardEcho/archive/develop.zip
-RUN unzip develop.zip
+RUN wget https://github.com/devsoup/SimpleDropWizardEcho/archive/v1.0.1.zip
+RUN unzip v1.0.1.zip
 
 # Build it
-WORKDIR /var/tmpbuild/SimpleDropWizardEcho-develop
+WORKDIR /var/tmpbuild/SimpleDropWizardEcho-1.0.1
 RUN /bin/bash -l mvn package
 
 EOF
@@ -24,4 +24,4 @@ EOF
 # Build it
 docker build -t devsoup/simple-builder - < buildbuilder.dockerfile
 
-echo Try 'docker run -i -t -p 49000:8080 -p 49000:8081 devsoup/simple-builder java -jar /var/tmpbuild/SimpleDropWizardEcho-develop/target/SimpleDropWizardEcho-1.0-SNAPSHOT.jar server'
+echo Try 'docker run -i -t -p 49000:8080 -p 49001:8081 devsoup/simple-builder java -jar /var/tmpbuild/SimpleDropWizardEcho-1.0.1/target/SimpleDropWizardEcho-1.0.1.jar server'
