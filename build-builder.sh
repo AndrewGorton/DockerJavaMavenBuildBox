@@ -24,4 +24,4 @@ EOF
 # Build it
 docker build -t devsoup/simple-builder - < buildbuilder.dockerfile
 
-echo Try 'docker run -i -t -p 49000:8080 devsoup/simple-builder java -jar /var/tmpbuild/SimpleDropWizardEcho-develop/target/SimpleDropWizardEcho-1.0-SNAPSHOT.jar server'
+echo Try 'docker run -i -t -p 49000:8080 -p 49000:8081 devsoup/simple-builder java -jar /var/tmpbuild/SimpleDropWizardEcho-develop/target/SimpleDropWizardEcho-1.0-SNAPSHOT.jar server'
