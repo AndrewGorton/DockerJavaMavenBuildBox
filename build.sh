@@ -27,6 +27,19 @@ RUN echo export M2_HOME=/usr/local/maven > /etc/profile.d/maven.sh
 RUN echo export PATH=\\\${M2_HOME}/bin:\\\${PATH} >> /etc/profile.d/maven.sh
 RUN echo source /etc/profile > ~/.profile
 
+# Download the code to build
+RUN yum -y install unzip
+WORKDIR /var
+RUN mkdir tmpbuild
+WORKDIR /var/tmpbuild
+RUN wget https://github.com/devsoup/SimpleDropWizardEcho/archive/develop.zip
+RUN unzip develop.zip
+
+# Build it
+WORKDIR /var/tmpbuild/SimpleDropWizardEcho-develop
+RUN /bin/bash -l mvn package
+
+
 EOF
 
 # Build it
