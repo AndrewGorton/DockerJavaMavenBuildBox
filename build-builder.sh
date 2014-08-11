@@ -6,13 +6,13 @@ docker rmi devsoup/simple-builder
 
 cat > buildbuilder.dockerfile << EOF
 # Set the base image
-FROM devsoup/centos-jdk7
+FROM devsoup/ubuntu-jdk7
 
 # Download the code to build
 WORKDIR /var
 RUN mkdir tmpbuild
 WORKDIR /var/tmpbuild
-RUN wget https://github.com/devsoup/SimpleDropWizardEcho/archive/v1.0.1.zip
+RUN wget https://github.com/AndrewGorton/SimpleDropWizardEcho/archive/v1.0.1.zip
 RUN unzip v1.0.1.zip
 
 # Build it
