@@ -19,9 +19,13 @@ RUN unzip v1.0.1.zip
 WORKDIR /var/tmpbuild/SimpleDropWizardEcho-1.0.1
 RUN /bin/bash -l mvn package
 
+# Set the entry point
+CMD ["java", "-jar", "/var/tmpbuild/SimpleDropWizardEcho-1.0.1/target/SimpleDropWizardEcho-1.0.1.jar", "server"]
+
 EOF
 
 # Build it
 docker build -t devsoup/simple-builder - < buildbuilder.dockerfile
 
-echo Try 'docker run -i -t -p 49000:8080 -p 49001:8081 devsoup/simple-builder java -jar /var/tmpbuild/SimpleDropWizardEcho-1.0.1/target/SimpleDropWizardEcho-1.0.1.jar server'
+echo Try 'docker run -i -t -p 49000:8080 -p 49001:8081 devsoup/simple-builder'
+echo Then "curl -i http://$(/usr/local/bin/boot2docker ip 2>/dev/null):49000/echo?echo=amazing && echo"
