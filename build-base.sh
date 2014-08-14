@@ -1,9 +1,10 @@
 #/bin/bash
 
+CONTAINER_NAME=devsoup/centos6-jdk7
+
 # Remove old instances
 docker ps -a | grep Exit | awk '{print $1}' | xargs docker rm
-docker rmi devsoup/centos6-jdk7
-
+docker rmi $CONTAINER_NAME
 cat > buildbase.dockerfile << EOF
 # Set the base image
 FROM centos:centos6
@@ -36,6 +37,6 @@ RUN yum install -y vim
 EOF
 
 # Build it
-docker build -t devsoup/centos6-jdk7 - < buildbase.dockerfile
+docker build -t $CONTAINER_NAME - < buildbase.dockerfile
 
-echo Try 'docker run -it devsoup/centos6-jdk7 /bin/bash -l'
+echo Try "docker run -it $CONTAINER_NAME /bin/bash -l"
