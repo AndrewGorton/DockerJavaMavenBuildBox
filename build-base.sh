@@ -5,6 +5,7 @@ CONTAINER_NAME=devsoup/centos6-jdk7
 # Remove old instances
 docker ps -a | grep Exit | awk '{print $1}' | xargs docker rm
 docker rmi $CONTAINER_NAME
+
 cat > buildbase.dockerfile << EOF
 # Set the base image
 FROM centos:centos6
