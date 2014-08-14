@@ -1,12 +1,14 @@
 #/bin/bash
 
+CONTAINER_NAME=devsoup/centos6-simpledropwizard
+
 # Remove old instances
 docker ps -a | grep Exit | awk '{print $1}' | xargs docker rm
-docker rmi devsoup/simple-builder
+docker rmi $CONTAINER_NAME
 
 cat > buildbuilder.dockerfile << EOF
 # Set the base image
-FROM devsoup/ubuntu-jdk7
+FROM devsoup/centos6-jdk7
 
 # Download the code to build
 WORKDIR /var
@@ -25,7 +27,7 @@ CMD ["java", "-jar", "/var/tmpbuild/SimpleDropWizardEcho-1.0.1/target/SimpleDrop
 EOF
 
 # Build it
-docker build -t devsoup/simple-builder - < buildbuilder.dockerfile
+docker build -t $CONTAINER_NAME - < buildbuilder.dockerfile
 
-echo Try 'docker run -i -t -p 49000:8080 -p 49001:8081 devsoup/simple-builder'
+echo Try "docker run -i -t -p 49000:8080 -p 49001:8081 $CONTAINER_NAME"
 echo Then "curl -i http://$(/usr/local/bin/boot2docker ip 2>/dev/null):49000/echo?echo=amazing && echo"

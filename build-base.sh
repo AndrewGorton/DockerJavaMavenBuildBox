@@ -2,24 +2,23 @@
 
 # Remove old instances
 docker ps -a | grep Exit | awk '{print $1}' | xargs docker rm
-docker rmi devsoup/ubuntu-jdk7
+docker rmi devsoup/centos6-jdk7
 
 cat > buildbase.dockerfile << EOF
 # Set the base image
-FROM ubuntu:latest
+FROM centos:centos6
 
 # Install OpenJDK
-RUN apt-get update
-RUN apt-get install -y openjdk-7-jdk
-RUN echo export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 > /etc/profile.d/java.sh
+RUN yum install -y java-1.7.0-openjdk-devel
+RUN echo export JAVA_HOME=/etc/alternatives/java_sdk > /etc/profile.d/java.sh
 
 # Install Git
-RUN apt-get install -y git
+RUN yum install -y git
 
 # Install Maven
-RUN apt-get install -y wget
+RUN yum install -y wget
 RUN wget http://mirror.cc.columbia.edu/pub/software/apache/maven/maven-3/3.1.1/binaries/apache-maven-3.1.1-bin.tar.gz
-RUN apt-get install -y tar
+RUN yum install -y tar
 RUN tar xzf apache-maven-3.1.1-bin.tar.gz -C /usr/local
 WORKDIR /usr/local
 RUN ln -s apache-maven-3.1.1 maven
@@ -29,14 +28,14 @@ RUN echo export PATH=\\\${M2_HOME}/bin:\\\${PATH} >> /etc/profile.d/maven.sh
 RUN echo source /etc/profile > ~/.profile
 
 # Install unzip
-RUN apt-get install -y unzip
+RUN yum install -y unzip
 
 # Install vim
-RUN apt-get install -y vim
+RUN yum install -y vim
 
 EOF
 
 # Build it
-docker build -t devsoup/ubuntu-jdk7 - < buildbase.dockerfile
+docker build -t devsoup/centos6-jdk7 - < buildbase.dockerfile
 
-echo Try 'docker run -it devsoup/ubuntu-jdk7 /bin/bash -l'
+echo Try 'docker run -it devsoup/centos6-jdk7 /bin/bash -l'
