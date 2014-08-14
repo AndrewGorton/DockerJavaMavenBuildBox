@@ -1,24 +1,25 @@
 #/bin/bash
 
 # Remove old instances
-docker rm `docker ps --no-trunc -a -q`
-docker rmi devsoup/centos-jdk7
+docker ps -a | grep Exit | awk '{print $1}' | xargs docker rm
+docker rmi devsoup/ubuntu-jdk7
 
 cat > buildbase.dockerfile << EOF
 # Set the base image
-FROM centos
+FROM ubuntu:latest
 
 # Install OpenJDK
-RUN yum -y install java-1.7.0-openjdk-devel
-RUN echo export JAVA_HOME=/usr/lib/jvm/jre-1.7.0-openjdk.x86_64 > /etc/profile.d/java.sh
+RUN apt-get update
+RUN apt-get install -y openjdk-7-jdk
+RUN echo export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 > /etc/profile.d/java.sh
 
 # Install Git
-RUN yum -y install git
+RUN apt-get install -y git
 
 # Install Maven
-RUN yum -y install wget
+RUN apt-get install -y wget
 RUN wget http://mirror.cc.columbia.edu/pub/software/apache/maven/maven-3/3.1.1/binaries/apache-maven-3.1.1-bin.tar.gz
-RUN yum -y install tar
+RUN apt-get install -y tar
 RUN tar xzf apache-maven-3.1.1-bin.tar.gz -C /usr/local
 WORKDIR /usr/local
 RUN ln -s apache-maven-3.1.1 maven
@@ -28,14 +29,14 @@ RUN echo export PATH=\\\${M2_HOME}/bin:\\\${PATH} >> /etc/profile.d/maven.sh
 RUN echo source /etc/profile > ~/.profile
 
 # Install unzip
-RUN yum -y install unzip
+RUN apt-get install -y unzip
 
 # Install vim
-RUN yum -y install vim
+RUN apt-get install -y vim
 
 EOF
 
 # Build it
-docker build -t devsoup/centos-jdk7 - < buildbase.dockerfile
+docker build -t devsoup/ubuntu-jdk7 - < buildbase.dockerfile
 
-echo Try 'docker run -i -t devsoup/centos-jdk7 /bin/bash -l'
+echo Try 'docker run -it devsoup/ubuntu-jdk7 /bin/bash -l'
