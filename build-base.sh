@@ -1,7 +1,7 @@
 #/bin/bash
 
 # Remove old instances
-docker rm `docker ps --no-trunc -a -q`
+docker ps -a | grep Exit | awk '{print $1}' | xargs docker rm
 docker rmi devsoup/ubuntu-jdk7
 
 cat > buildbase.dockerfile << EOF
